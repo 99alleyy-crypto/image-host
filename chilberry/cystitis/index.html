@@ -24436,5 +24436,28 @@ function togglePostReact(el,cls){var b=el.querySelector('b');var n=parseInt(b.te
 function openCommentImage(img){var lb=document.getElementById('commentImgLightbox');var lbImg=document.getElementById('commentImgLightboxImg');if(!lb||!lbImg)return;lbImg.src=img.src;lb.classList.add('show');event&&event.stopPropagation&&event.stopPropagation();}
 function closeCommentImage(){var lb=document.getElementById('commentImgLightbox');if(lb)lb.classList.remove('show');}
 </script>
+
+<script>
+/* iframe-resize: 부모(게시판)로 페이지 높이 전달 */
+(function(){
+  function sendH(){
+    try{
+      var h = Math.max(
+        document.body.scrollHeight, document.documentElement.scrollHeight,
+        document.body.offsetHeight, document.documentElement.offsetHeight
+      );
+      if(window.parent && window.parent!==window){
+        window.parent.postMessage({type:'CYSTITIS_HEIGHT', height:h}, '*');
+      }
+    }catch(e){}
+  }
+  window.addEventListener('load', sendH);
+  window.addEventListener('resize', sendH);
+  // 댓글 페이지 이동 등 DOM 변화 후에도 갱신
+  setInterval(sendH, 1000);
+  document.addEventListener('click', function(){ setTimeout(sendH,300); });
+})();
+</script>
+
 </body>
 </html>
